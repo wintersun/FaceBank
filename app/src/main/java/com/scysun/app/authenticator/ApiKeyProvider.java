@@ -21,7 +21,11 @@ import static com.scysun.app.core.Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE;
  */
 public class ApiKeyProvider {
 
-    @Inject protected AccountManager accountManager;
+    private AccountManager accountManager;
+
+    public ApiKeyProvider(AccountManager accountManager) {
+        this.accountManager = accountManager;
+    }
 
     /**
      * This call blocks, so shouldn't be called on the UI thread.

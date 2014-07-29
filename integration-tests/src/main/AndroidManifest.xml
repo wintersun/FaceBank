@@ -8,6 +8,6 @@
 		<uses-library android:name="android.test.runner"/>
 	</application>
 
-	<instrumentation android:label="facebank - Integration Tests" android:name="android.test.InstrumentationTestRunner" android:targetPackage="com.scysun.app"/>
+	<instrumentation android:label="FaceBank - Integration Tests" android:name="android.test.InstrumentationTestRunner" android:targetPackage="com.scysun.app"/>
 
 </manifest>

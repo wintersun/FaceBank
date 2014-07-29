@@ -3,23 +3,34 @@ package com.scysun.app;
 import android.accounts.AccountManager;
 import android.content.Context;
 
+import com.scysun.app.authenticator.ApiKeyProvider;
 import com.scysun.app.authenticator.BootstrapAuthenticatorActivity;
 import com.scysun.app.authenticator.LogoutService;
+import com.scysun.app.core.BootstrapService;
+import com.scysun.app.core.Constants;
+import com.scysun.app.core.PostFromAnyThreadBus;
+import com.scysun.app.core.RestAdapterRequestInterceptor;
+import com.scysun.app.core.RestErrorHandler;
 import com.scysun.app.core.TimerService;
+import com.scysun.app.core.UserAgentProvider;
 import com.scysun.app.ui.BootstrapTimerActivity;
-import com.scysun.app.ui.MainActivity;
 import com.scysun.app.ui.CheckInsListFragment;
+import com.scysun.app.ui.MainActivity;
 import com.scysun.app.ui.NavigationDrawerFragment;
 import com.scysun.app.ui.NewsActivity;
 import com.scysun.app.ui.NewsListFragment;
 import com.scysun.app.ui.UserActivity;
 import com.scysun.app.ui.UserListFragment;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
 
 /**
  * Dagger module for setting up provides statements.
@@ -47,13 +58,66 @@ public class BootstrapModule {
     @Singleton
     @Provides
     Bus provideOttoBus() {
-        return new Bus();
+        return new PostFromAnyThreadBus();
     }
 
     @Provides
     @Singleton
     LogoutService provideLogoutService(final Context context, final AccountManager accountManager) {
         return new LogoutService(context, accountManager);
+    }
+
+    @Provides
+    BootstrapService provideBootstrapService(RestAdapter restAdapter) {
+        return new BootstrapService(restAdapter);
+    }
+
+    @Provides
+    BootstrapServiceProvider provideBootstrapServiceProvider(RestAdapter restAdapter, ApiKeyProvider apiKeyProvider) {
+        return new BootstrapServiceProvider(restAdapter, apiKeyProvider);
+    }
+
+    @Provides
+    ApiKeyProvider provideApiKeyProvider(AccountManager accountManager) {
+        return new ApiKeyProvider(accountManager);
+    }
+
+    @Provides
+    Gson provideGson() {
+        /**
+         * GSON instance to use for all request  with date format set up for proper parsing.
+         * <p/>
+         * You can also configure GSON with different naming policies for your API.
+         * Maybe your API is Rails API and all json values are lower case with an underscore,
+         * like this "first_name" instead of "firstName".
+         * You can configure GSON as such below.
+         * <p/>
+         *
+         * public static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd")
+         *         .setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES).create();
+         */
+        return new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+    }
+
+    @Provides
+    RestErrorHandler provideRestErrorHandler(Bus bus) {
+        return new RestErrorHandler(bus);
+    }
+
+    @Provides
+    RestAdapterRequestInterceptor provideRestAdapterRequestInterceptor(UserAgentProvider userAgentProvider) {
+        return new RestAdapterRequestInterceptor(userAgentProvider);
+    }
+
+    @Provides
+    RestAdapter provideRestAdapter(RestErrorHandler restErrorHandler, RestAdapterRequestInterceptor restRequestInterceptor, Gson gson) {
+        return new RestAdapter.Builder()
+                .setEndpoint(Constants.Http.URL_BASE)
+                .setErrorHandler(restErrorHandler)
+                .setRequestInterceptor(restRequestInterceptor)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setConverter(new GsonConverter(gson))
+                .build();
     }
 
 }

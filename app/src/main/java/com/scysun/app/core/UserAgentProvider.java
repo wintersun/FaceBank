@@ -27,7 +27,7 @@ import javax.inject.Provider;
  *
  * Example of what is generated when running the Genymotion Nexus 4 Emulator:
  *
- *      facebank/1.0 (Android 4.2.2; Genymotion Vbox86p / Generic Galaxy Nexus - 4.2.2 - API 17 - 720x1280; )[preload=false;locale=en_US;clientidbase=]
+ *      FaceBank/1.0 (Android 4.2.2; Genymotion Vbox86p / Generic Galaxy Nexus - 4.2.2 - API 17 - 720x1280; )[preload=false;locale=en_US;clientidbase=]
  *
  * The value "preload" means that the app has been preloaded by the manufacturer.
  * Instances of when this might happen is if you partner with a telecom company
@@ -38,7 +38,7 @@ import javax.inject.Provider;
  */
 public class UserAgentProvider implements Provider<String> {
 
-    private static final String APP_NAME = "facebank";
+    private static final String APP_NAME = "FaceBank";
 
     @Inject protected ApplicationInfo appInfo;
     @Inject protected PackageInfo info;

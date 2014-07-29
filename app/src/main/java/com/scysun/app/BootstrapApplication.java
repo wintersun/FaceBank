@@ -6,13 +6,8 @@ import android.app.Application;
 import android.app.Instrumentation;
 import android.content.Context;
 
-import com.github.kevinsawicki.http.HttpRequest;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.FROYO;
-
 /**
- * facebank application
+ * FaceBank application
  */
 public class BootstrapApplication extends Application {
 
@@ -22,10 +17,6 @@ public class BootstrapApplication extends Application {
      * Create main application
      */
     public BootstrapApplication() {
-        // Disable http.keepAlive on Froyo and below
-        if (SDK_INT <= FROYO) {
-            HttpRequest.keepAlive(false);
-        }
     }
 
     /**
