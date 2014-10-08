@@ -43,19 +43,22 @@ public final class Constants {
         /**
          * Base URL for all requests
          */
-        public static final String URL_BASE = "https://api.parse.com";
+//        public static final String URL_BASE = "https://api.parse.com";
+//        public static final String URL_AUTH_FRAG = "/1/login";
+//        public static final String URL_USERS_FRAG =  "/1/users";
 
+        public static final String URL_BASE = "http://s.facebank.com.cn/fbserver";
+        public static final String URL_AUTH_FRAG = "/user/auth";
+        public static final String URL_USERS_FRAG =  "/user/list";
 
         /**
          * Authentication URL
          */
-        public static final String URL_AUTH_FRAG = "/1/login";
         public static final String URL_AUTH = URL_BASE + URL_AUTH_FRAG;
 
         /**
          * List Users URL
          */
-        public static final String URL_USERS_FRAG =  "/1/users";
         public static final String URL_USERS = URL_BASE + URL_USERS_FRAG;
 
 
@@ -118,6 +121,15 @@ public final class Constants {
         public static final int TIMER_NOTIFICATION_ID = 1000; // Why 1000? Why not? :)
     }
 
+    public static class DateFormat{
+        private DateFormat(){
+
+        }
+
+        public static final String DATE_FORMAT = "yyyy-MM-dd";
+
+        public static final long TIME_MILLIS_PER_DAY = 3600 * 24 * 1000;
+    }
 }
 
 

@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/table_text_light_selector" />
     </LinearLayout>
 

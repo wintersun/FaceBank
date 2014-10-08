@@ -1,0 +1,102 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.scysun.app.ui.view.HomeFragment"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/life_count_down_title"
+        android:enabled="false"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/table_text_selector" />
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="0,1">
+
+        <TableRow>
+            <TextView
+                android:id="@+id/lbl_birthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/table_text_selector"
+                android:text="@string/birthday"
+                android:layout_column="0"
+                android:inputType="none" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:ems="10"
+                android:id="@+id/birthday"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/table_text_selector"
+                android:hint="@string/birthday_desc"
+                android:layout_column="1" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/lbl_ageOfDeath"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/table_text_selector"
+                android:text="@string/ageOfDeath"
+                android:layout_column="0"
+                android:inputType="none" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/ageOfDeath"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/table_text_selector"
+                android:hint="@string/ageOfDeath_desc"
+                android:layout_column="1" />
+        </TableRow>
+        <TableRow android:baselineAligned="false">
+            <TextView
+                android:id="@+id/lbl_timeLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/table_text_selector"
+                android:text="@string/timeLeft"
+                android:layout_column="0"
+                android:inputType="none" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:ems="10"
+                android:id="@+id/timeLeft"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/table_text_selector"
+                android:layout_column="1"
+                android:editable="false" />
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/liveChronometer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="00:00:00"
+                style="@style/TimerChronometer"
+                android:layout_span="3" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

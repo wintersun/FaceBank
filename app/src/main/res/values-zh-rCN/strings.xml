@@ -7,7 +7,8 @@
     <string name="page_referrers">Referrers</string>
     <string name="refresh_action">Refresh</string>
     <string name="logout_action">Logout</string>
-    <string name="page_news">News</string>
+    <string name="page_news">新闻</string>
+    <string name="page_home">首页</string>
     <string name="page_users">Users</string>
     <string name="page_checkins">Check In\'s</string>
     <string name="title_column">Title</string>
@@ -20,7 +21,7 @@
     <string name="no_users">No Users</string>
     <string name="no_news">No News</string>
     <string name="avatar">Avatar</string>
-    <string name="choose">Choose</string>
+    <string name="choose">选择</string>
 
     <!-- AuthenticatorActivity -->
     <string name="label_email_address">邮箱地址</string>
@@ -43,6 +44,17 @@
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Close</string>
     <string name="title_home">Home</string>
+
+    <!-- Common -->
+    <string name="birthday">生日</string>
+    <string name="birthday_desc">你的出生日期？</string>
+    <string name="unit_day">天</string>
+
+    <!-- Life count down -->
+    <string name="life_count_down_title">生命倒计时</string>
+    <string name="ageOfDeath">享年</string>
+    <string name="ageOfDeath_desc">你希望活到多少岁？</string>
+    <string name="timeLeft">生命剩余</string>
 
 
 </resources>

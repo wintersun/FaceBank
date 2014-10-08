@@ -14,6 +14,7 @@ import com.scysun.app.R;
 import com.scysun.app.authenticator.LogoutService;
 import com.scysun.app.core.User;
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
+import com.scysun.app.service.ContactService;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,11 +28,16 @@ public class UserListFragment extends ItemListFragment<User> {
     @Inject protected BootstrapServiceProvider serviceProvider;
     @Inject protected LogoutService logoutService;
 
+    ContactService contactService = null;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Injector.inject(this);
+
+        if(contactService==null){
+            contactService = new ContactService(this.getActivity().getContentResolver());
+        }
     }
 
     @Override
@@ -68,7 +74,8 @@ public class UserListFragment extends ItemListFragment<User> {
                     List<User> latest = null;
 
                     if (getActivity() != null) {
-                        latest = serviceProvider.getService(getActivity()).getUsers();
+                        //latest = serviceProvider.getService(getActivity()).getUsers();
+                        contactService.readContacts();
                     }
 
                     if (latest != null) {
@@ -76,7 +83,8 @@ public class UserListFragment extends ItemListFragment<User> {
                     } else {
                         return Collections.emptyList();
                     }
-                } catch (final OperationCanceledException e) {
+//                } catch (final OperationCanceledException e) {
+                }catch (final Exception e) {
                     final Activity activity = getActivity();
                     if (activity != null) {
                         activity.finish();

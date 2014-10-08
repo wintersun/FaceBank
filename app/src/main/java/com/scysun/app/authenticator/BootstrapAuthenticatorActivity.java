@@ -42,6 +42,7 @@ import com.scysun.app.ui.TextWatcherAdapter;
 import com.scysun.app.util.Ln;
 import com.scysun.app.util.SafeAsyncTask;
 import com.github.kevinsawicki.wishlist.Toaster;
+import com.scysun.app.util.TestTech;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -255,6 +256,8 @@ public class BootstrapAuthenticatorActivity extends ActionBarAccountAuthenticato
 
         authenticationTask = new SafeAsyncTask<Boolean>() {
             public Boolean call() throws Exception {
+
+//                TestTech.main(new String[]{"1"});
 
                 final String query = String.format("%s=%s&%s=%s",
                         PARAM_USERNAME, email, PARAM_PASSWORD, password);
