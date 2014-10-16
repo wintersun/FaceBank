@@ -130,6 +130,12 @@ public final class Constants {
 
         public static final long TIME_MILLIS_PER_DAY = 3600 * 24 * 1000;
     }
+
+    public static class SharedPreferences_LiveChronometer {
+        public static final String NAME = "LiveChronometer";
+        public static final String BIRTHDAY = "BIRTHDAY";
+        public static final String AGE_OF_DEATH = "AGE_OF_DEATH";
+    }
 }
 
 

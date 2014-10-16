@@ -1,6 +1,7 @@
 package com.scysun.app.ui.view;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,17 +18,14 @@ import com.scysun.app.R;
 import com.scysun.app.core.Constants;
 import com.scysun.app.ui.view.Listener.DatePickerListener;
 import com.scysun.app.util.FBDateUtils;
+import com.scysun.app.util.PreferenceUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.impl.cookie.DateParseException;
 import org.apache.http.impl.cookie.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.InjectView;
 import butterknife.Views;
@@ -50,6 +47,7 @@ public class HomeFragment extends Fragment
     @InjectView(R.id.liveChronometer) protected TextView liveChronometer;
 
     private TimeLeftOnFocusChangeListener timeLeftOnFocusChangeListener = new TimeLeftOnFocusChangeListener();
+    private TimeLeftTextWatcher timeLeftTextWatcher = new TimeLeftTextWatcher();
     private LiveChronometerUpdater liveChronometerUpdater;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -62,6 +60,8 @@ public class HomeFragment extends Fragment
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    Activity activity;
 
     /**
      * Use this factory method to create a new instance of
@@ -102,24 +102,9 @@ public class HomeFragment extends Fragment
 
         birthday.setInputType(InputType.TYPE_NULL);
         birthday.setOnClickListener(new DatePickerListener(birthday));
+        birthday.addTextChangedListener(timeLeftTextWatcher);
 
-        birthday.setOnFocusChangeListener(timeLeftOnFocusChangeListener);
-//        ageOfDeath.setOnFocusChangeListener(timeLeftOnFocusChangeListener);
-
-        ageOfDeath.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                //do nothing
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                calculateDateToLive();
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count){
-                //do nothing
-            }
-        });
+        ageOfDeath.addTextChangedListener(timeLeftTextWatcher);
 
         timeLeft.setInputType(InputType.TYPE_NULL);
 
@@ -141,8 +126,10 @@ public class HomeFragment extends Fragment
 
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
+        this.activity = activity;
 
+        super.onAttach(activity);
+        Log.i("Test", "onAttach");
         /*
         try {
             mListener = (OnFragmentInteractionListener) activity;
@@ -151,6 +138,20 @@ public class HomeFragment extends Fragment
                     + " must implement OnFragmentInteractionListener");
         }
         */
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Log.i("Test", "onStart");
+        int ageOfDeathInt = PreferenceUtils.readSharedPreferenceIntVariable(activity, Constants.SharedPreferences_LiveChronometer.NAME,
+                Constants.SharedPreferences_LiveChronometer.AGE_OF_DEATH, 80);
+        ageOfDeath.setText(String.valueOf(ageOfDeathInt));
+
+        String birthdayStr = PreferenceUtils.readSharedPreference(activity, Constants.SharedPreferences_LiveChronometer.NAME,
+                Constants.SharedPreferences_LiveChronometer.BIRTHDAY, "1980-01-01");
+        birthday.setText(birthdayStr);
     }
 
     @Override
@@ -194,6 +195,9 @@ public class HomeFragment extends Fragment
 
                 long currTimeMillis = System.currentTimeMillis();
                 result = (calendar.getTimeInMillis() - currTimeMillis) / Constants.DateFormat.TIME_MILLIS_PER_DAY;
+                if(result<=0){
+                    return 0;
+                }
 
                 //Display the rest days to live
                 timeLeft.setText(
@@ -241,6 +245,36 @@ public class HomeFragment extends Fragment
             if(!hasFocus){
                 calculateDateToLive();
             }
+        }
+    }
+
+    private class TimeLeftTextWatcher implements TextWatcher
+    {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            //do nothing
+        }
+        @Override
+        public void afterTextChanged(Editable s) {
+            SharedPreferences.Editor editor = null;
+            if(StringUtils.isNotEmpty(ageOfDeath.getText().toString())) {
+                editor = PreferenceUtils.writeSharedPreferenceIntValue(activity, Constants.SharedPreferences_LiveChronometer.NAME,
+                        Constants.SharedPreferences_LiveChronometer.AGE_OF_DEATH,
+                        Integer.parseInt(ageOfDeath.getText().toString()), true);
+            }
+
+            if(StringUtils.isNotEmpty(birthday.getText().toString())) {
+                editor = PreferenceUtils.writeSharedPreference(activity, Constants.SharedPreferences_LiveChronometer.NAME,
+                        Constants.SharedPreferences_LiveChronometer.BIRTHDAY,
+                        birthday.getText().toString(), true);
+            }
+//            if(editor!=null) editor.commit();
+
+            calculateDateToLive();
+        }
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count){
+            //do nothing
         }
     }
 }
