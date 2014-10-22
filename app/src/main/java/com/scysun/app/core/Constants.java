@@ -47,7 +47,8 @@ public final class Constants {
 //        public static final String URL_AUTH_FRAG = "/1/login";
 //        public static final String URL_USERS_FRAG =  "/1/users";
 
-        public static final String URL_BASE = "http://s.facebank.com.cn/fbserver";
+        //public static final String URL_BASE = "http://s.facebank.com.cn/fbserver";
+        public static final String URL_BASE = "http://119.146.191.102/fbserver";
         public static final String URL_AUTH_FRAG = "/user/auth";
         public static final String URL_USERS_FRAG =  "/user/list";
 
@@ -134,6 +135,7 @@ public final class Constants {
     public static class SharedPreferences_LiveChronometer {
         public static final String NAME = "LiveChronometer";
         public static final String BIRTHDAY = "BIRTHDAY";
+        public static final String AGE_OF_RETIREMENT = "AGE_OF_RETIREMENT";
         public static final String AGE_OF_DEATH = "AGE_OF_DEATH";
     }
 }

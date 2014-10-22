@@ -75,7 +75,7 @@ public class UserListFragment extends ItemListFragment<User> {
 
                     if (getActivity() != null) {
                         //latest = serviceProvider.getService(getActivity()).getUsers();
-                        contactService.readContacts();
+                        latest = contactService.readContacts();
                     }
 
                     if (latest != null) {

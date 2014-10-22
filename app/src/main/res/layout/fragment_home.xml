@@ -43,6 +43,52 @@
         </TableRow>
         <TableRow>
             <TextView
+                android:id="@+id/lbl_ageOfRetire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/table_text_selector"
+                android:text="@string/ageOfRetire"
+                android:layout_column="0"
+                android:inputType="none" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/ageOfRetire"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/table_text_selector"
+                android:hint="@string/ageOfRetire_desc"
+                android:layout_column="1" />
+        </TableRow>
+        <TableRow android:baselineAligned="false">
+            <TextView
+                android:id="@+id/lbl_workingTimeLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/table_text_selector"
+                android:text="@string/workingTimeLeft"
+                android:layout_column="0"
+                android:inputType="none" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:ems="10"
+                android:id="@+id/workingTimeLeft"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/table_text_selector"
+                android:layout_column="1"
+                android:editable="false" />
+        </TableRow>
+        <TableRow>
+            <TextView
                 android:id="@+id/lbl_ageOfDeath"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

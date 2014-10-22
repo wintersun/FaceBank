@@ -1,6 +1,10 @@
 package com.scysun.app.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +20,7 @@ public class UserActivity extends BootstrapActivity {
 
     @InjectView(R.id.iv_avatar) protected ImageView avatar;
     @InjectView(R.id.tv_name) protected TextView name;
+    @InjectView(R.id.tv_editDetail) protected Button btnEditDetail;
 
     private User user;
 
@@ -36,9 +41,19 @@ public class UserActivity extends BootstrapActivity {
                 .placeholder(R.drawable.gravatar_icon)
                 .into(avatar);
 
-        name.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
+
+        name.setText(user.getFormatedRealUserName());
+
+        btnEditDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_EDIT,
+                        Uri.parse("content://com.android.contacts/contacts/" + user.getObjectId()));
+
+                startActivity(intent);
+            }
+        });
 
     }
-
 
 }

@@ -42,11 +42,15 @@ import butterknife.Views;
 public class HomeFragment extends Fragment
 {
     @InjectView(R.id.birthday) protected TextView birthday;
+
+    @InjectView(R.id.ageOfRetire) protected TextView ageOfRetire;
+    @InjectView(R.id.workingTimeLeft) protected TextView workingTimeLeft;
+
     @InjectView(R.id.ageOfDeath) protected TextView ageOfDeath;
     @InjectView(R.id.timeLeft) protected TextView timeLeft;
+
     @InjectView(R.id.liveChronometer) protected TextView liveChronometer;
 
-    private TimeLeftOnFocusChangeListener timeLeftOnFocusChangeListener = new TimeLeftOnFocusChangeListener();
     private TimeLeftTextWatcher timeLeftTextWatcher = new TimeLeftTextWatcher();
     private LiveChronometerUpdater liveChronometerUpdater;
 
@@ -54,6 +58,9 @@ public class HomeFragment extends Fragment
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private static final String CALCULATE_TYPE_DEATH = "DEATH";
+    private static final String CALCULATE_TYPE_RETIREMENT = "RETIREMENT";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -104,6 +111,8 @@ public class HomeFragment extends Fragment
         birthday.setOnClickListener(new DatePickerListener(birthday));
         birthday.addTextChangedListener(timeLeftTextWatcher);
 
+        ageOfRetire.addTextChangedListener(timeLeftTextWatcher);
+
         ageOfDeath.addTextChangedListener(timeLeftTextWatcher);
 
         timeLeft.setInputType(InputType.TYPE_NULL);
@@ -145,12 +154,16 @@ public class HomeFragment extends Fragment
         super.onStart();
 
         Log.i("Test", "onStart");
+        String birthdayStr = PreferenceUtils.readSharedPreference(activity, Constants.SharedPreferences_LiveChronometer.NAME,
+                Constants.SharedPreferences_LiveChronometer.BIRTHDAY, "1980-01-01");
+
+        int ageOfRetirementInt = PreferenceUtils.readSharedPreferenceIntVariable(activity, Constants.SharedPreferences_LiveChronometer.NAME,
+                Constants.SharedPreferences_LiveChronometer.AGE_OF_RETIREMENT, 60);
+        ageOfRetire.setText(String.valueOf(ageOfRetirementInt));
+
         int ageOfDeathInt = PreferenceUtils.readSharedPreferenceIntVariable(activity, Constants.SharedPreferences_LiveChronometer.NAME,
                 Constants.SharedPreferences_LiveChronometer.AGE_OF_DEATH, 80);
         ageOfDeath.setText(String.valueOf(ageOfDeathInt));
-
-        String birthdayStr = PreferenceUtils.readSharedPreference(activity, Constants.SharedPreferences_LiveChronometer.NAME,
-                Constants.SharedPreferences_LiveChronometer.BIRTHDAY, "1980-01-01");
         birthday.setText(birthdayStr);
     }
 
@@ -179,44 +192,62 @@ public class HomeFragment extends Fragment
      * Calculate the date to live if Birthday and AgeOfDeath are all ready
      * @return days of rest life
      */
-    private long calculateDateToLive()
+    private long calculateDateToLive(String type)
     {
         long result = 0l;
 
-        String birdayStr = birthday.getText().toString();
-        if(StringUtils.isNotEmpty(birdayStr)
-                && StringUtils.isNotEmpty(ageOfDeath.getText().toString()))
-        {
-            try {
-                Date birth = DateUtils.parseDate(birdayStr, new String[]{Constants.DateFormat.DATE_FORMAT});
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(birth);
-                calendar.add(Calendar.YEAR, Integer.parseInt(ageOfDeath.getText().toString()));
+        String birthdayStr = birthday.getText().toString();
+        String ageOfRetireStr = ageOfRetire.getText().toString();
+        String ageOfDeathStr = ageOfDeath.getText().toString();
+        try {
+            if (StringUtils.isNotEmpty(birthdayStr)) {
+                if(CALCULATE_TYPE_DEATH.equals(type) && StringUtils.isNotEmpty(ageOfDeathStr)) {
+                    Long[] timeToLive = this.countRestDaytime(Integer.parseInt(ageOfDeathStr), birthdayStr, true);
+                    result = timeToLive[0];
 
-                long currTimeMillis = System.currentTimeMillis();
-                result = (calendar.getTimeInMillis() - currTimeMillis) / Constants.DateFormat.TIME_MILLIS_PER_DAY;
-                if(result<=0){
-                    return 0;
+                    //Display the rest days to live
+                    timeLeft.setText(String.valueOf(result) + " " + getString(R.string.unit_day));
+
+                    //Display the rest time
+                    final long timeMillis = timeToLive[1];
+                    if (liveChronometerUpdater != null) {
+                        liveChronometerUpdater.cancel();
+                    }
+                    liveChronometerUpdater = new LiveChronometerUpdater(timeMillis, 1000);
+                    liveChronometerUpdater.start();
                 }
-
-                //Display the rest days to live
-                timeLeft.setText(
-//                        getString(R.string.timeLeft) + " " +
-                        String.valueOf(result) + " " + getString(R.string.unit_day));
-
-                //Display the rest time
-                final long timeMillis = (calendar.getTimeInMillis() - currTimeMillis) % Constants.DateFormat.TIME_MILLIS_PER_DAY;
-
-                if(liveChronometerUpdater!=null){
-                    liveChronometerUpdater.cancel();
+                else if(CALCULATE_TYPE_RETIREMENT.equals(type) && StringUtils.isNotEmpty(ageOfRetireStr)) {
+                    Long[] timeToLive = this.countRestDaytime(Integer.parseInt(ageOfRetireStr), birthdayStr, false);
+                    result = timeToLive[0];
+                    //Display the rest days to work
+                    workingTimeLeft.setText(String.valueOf(result) + " " + getString(R.string.unit_day));
                 }
-                liveChronometerUpdater = new LiveChronometerUpdater(timeMillis, 1000);
-                liveChronometerUpdater.start();
-
-            } catch (DateParseException e) {
-                Log.e("date-format", "Wrong date format that can't be parsed:" + birdayStr);
-                timeLeft.setText("");
             }
+
+        } catch (DateParseException e) {
+                Log.e("date-format", "Wrong date format that can't be parsed:" + birthdayStr);
+                timeLeft.setText("");
+        }
+        return result;
+    }
+
+    private Long[] countRestDaytime(int years, String birthdayStr, boolean calTimeMillis) throws DateParseException
+    {
+        Long result[] = new Long[2];
+
+        Date birth = DateUtils.parseDate(birthdayStr, new String[]{Constants.DateFormat.DATE_FORMAT});
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(birth);
+        calendar.add(Calendar.YEAR, years);
+
+        long currTimeMillis = System.currentTimeMillis();
+        result[0] = (calendar.getTimeInMillis() - currTimeMillis) / Constants.DateFormat.TIME_MILLIS_PER_DAY;
+        if(result[0]<0){
+            result[0] = 0l;
+        }
+
+        if(calTimeMillis) {
+            result[1] = (calendar.getTimeInMillis() - currTimeMillis) % Constants.DateFormat.TIME_MILLIS_PER_DAY;
         }
 
         return result;
@@ -237,7 +268,7 @@ public class HomeFragment extends Fragment
 
     /***
      * Listener for Birthday/AgeOfDeath changed
-     */
+
     private class TimeLeftOnFocusChangeListener implements View.OnFocusChangeListener
     {
         @Override
@@ -246,7 +277,7 @@ public class HomeFragment extends Fragment
                 calculateDateToLive();
             }
         }
-    }
+    }*/
 
     private class TimeLeftTextWatcher implements TextWatcher
     {
@@ -257,20 +288,29 @@ public class HomeFragment extends Fragment
         @Override
         public void afterTextChanged(Editable s) {
             SharedPreferences.Editor editor = null;
-            if(StringUtils.isNotEmpty(ageOfDeath.getText().toString())) {
-                editor = PreferenceUtils.writeSharedPreferenceIntValue(activity, Constants.SharedPreferences_LiveChronometer.NAME,
-                        Constants.SharedPreferences_LiveChronometer.AGE_OF_DEATH,
-                        Integer.parseInt(ageOfDeath.getText().toString()), true);
-            }
 
             if(StringUtils.isNotEmpty(birthday.getText().toString())) {
                 editor = PreferenceUtils.writeSharedPreference(activity, Constants.SharedPreferences_LiveChronometer.NAME,
                         Constants.SharedPreferences_LiveChronometer.BIRTHDAY,
                         birthday.getText().toString(), true);
+                calculateDateToLive(CALCULATE_TYPE_DEATH);
+                calculateDateToLive(CALCULATE_TYPE_RETIREMENT);
             }
-//            if(editor!=null) editor.commit();
 
-            calculateDateToLive();
+            if(StringUtils.isNotEmpty(ageOfDeath.getText().toString())) {
+                editor = PreferenceUtils.writeSharedPreferenceIntValue(activity, Constants.SharedPreferences_LiveChronometer.NAME,
+                        Constants.SharedPreferences_LiveChronometer.AGE_OF_DEATH,
+                        Integer.parseInt(ageOfDeath.getText().toString()), true);
+                calculateDateToLive(CALCULATE_TYPE_DEATH);
+            }
+
+            if(StringUtils.isNotEmpty(ageOfRetire.getText().toString())) {
+                editor = PreferenceUtils.writeSharedPreferenceIntValue(activity, Constants.SharedPreferences_LiveChronometer.NAME,
+                        Constants.SharedPreferences_LiveChronometer.AGE_OF_RETIREMENT,
+                        Integer.parseInt(ageOfRetire.getText().toString()), true);
+                calculateDateToLive(CALCULATE_TYPE_RETIREMENT);
+            }
+
         }
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count){

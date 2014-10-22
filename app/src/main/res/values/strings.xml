@@ -8,7 +8,7 @@
     <string name="logout_action">Logout</string>
     <string name="page_news">News</string>
     <string name="page_home">Home</string>
-    <string name="page_users">Users</string>
+    <string name="page_users">First Contacts</string>
     <string name="page_checkins">Check In\'s</string>
     <string name="title_column">Title</string>
     <string name="location_column">Location</string>
@@ -47,12 +47,19 @@
     <!-- Common -->
     <string name="birthday">Birthday</string>
     <string name="birthday_desc">Input Your Birthday</string>
+    <string name="unit_age"> Years Old</string>
     <string name="unit_day">Days</string>
 
     <!-- Life count down -->
     <string name="life_count_down_title">Life Count Down</string>
+    <string name="ageOfRetire">Retirement</string>
+    <string name="ageOfRetire_desc">How old do you want to work？</string>
+    <string name="workingTimeLeft">Working time</string>
     <string name="ageOfDeath">Age of Death</string>
     <string name="ageOfDeath_desc">How old do you want to live？</string>
     <string name="timeLeft">Time to Live</string>
+
+    <!-- Contact Detail -->
+    <string name="edit_detail">Edit Contact Detail</string>
 
 </resources>

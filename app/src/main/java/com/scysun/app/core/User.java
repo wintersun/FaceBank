@@ -17,6 +17,15 @@ public class User implements Serializable {
     protected String gravatarId;
     protected String avatarUrl;
 
+    protected String email;
+    protected String organization;
+    protected String address;
+
+    public String getFormatedRealUserName()
+    {
+        String lastName = getLastName() == null ? "" : getLastName();
+        return String.format("%s %s", getFirstName(), lastName);
+    }
 
     public String getUsername() {
         return username;
@@ -68,6 +77,30 @@ public class User implements Serializable {
 
     public String getGravatarId() {
         return gravatarId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getAvatarUrl() {

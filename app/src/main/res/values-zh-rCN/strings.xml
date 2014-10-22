@@ -9,22 +9,22 @@
     <string name="logout_action">Logout</string>
     <string name="page_news">新闻</string>
     <string name="page_home">首页</string>
-    <string name="page_users">Users</string>
-    <string name="page_checkins">Check In\'s</string>
-    <string name="title_column">Title</string>
+    <string name="page_users">一度人脉</string>
+    <string name="page_checkins">人脉动态</string>
+    <string name="title_column">标题</string>
     <string name="location_column">Location</string>
-    <string name="user_column">User</string>
+    <string name="user_column">人脉列表</string>
     <string name="date_column">Date</string>
-    <string name="error_loading_users">Loading users failed</string>
+    <string name="error_loading_users">加载人脉列表失败……</string>
     <string name="error_loading_news">Loading news failed</string>
     <string name="error_loading_checkins">Loading check-ins failed</string>
-    <string name="no_users">No Users</string>
+    <string name="no_users">没有找到相关人脉信息</string>
     <string name="no_news">No News</string>
     <string name="avatar">Avatar</string>
     <string name="choose">选择</string>
 
     <!-- AuthenticatorActivity -->
-    <string name="label_email_address">邮箱地址</string>
+    <string name="label_email_address">手机号码或用户名</string>
     <string name="label_password">密码</string>
     <string name="label_sign_in">登录</string>
     <string name="message_signing_in">登录中……</string>
@@ -43,18 +43,25 @@
     <string name="home">Home</string>
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Close</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">主页</string>
 
     <!-- Common -->
     <string name="birthday">生日</string>
     <string name="birthday_desc">你的出生日期？</string>
+    <string name="unit_age">岁</string>
     <string name="unit_day">天</string>
 
     <!-- Life count down -->
     <string name="life_count_down_title">生命倒计时</string>
+    <string name="ageOfRetire">退休</string>
+    <string name="ageOfRetire_desc">你希望多少岁退休？</string>
+    <string name="workingTimeLeft">工作时间</string>
     <string name="ageOfDeath">享年</string>
     <string name="ageOfDeath_desc">你希望活到多少岁？</string>
     <string name="timeLeft">生命剩余</string>
+
+    <!-- Contact Detail -->
+    <string name="edit_detail">修改通讯录资料</string>
 
 
 </resources>
