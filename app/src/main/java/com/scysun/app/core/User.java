@@ -13,6 +13,7 @@ public class User implements Serializable {
     protected String username;
     protected String phone;
     protected String objectId;
+    protected String contactId;
     protected String sessionToken;
     protected String gravatarId;
     protected String avatarUrl;
@@ -49,6 +50,14 @@ public class User implements Serializable {
 
     public void setObjectId(final String objectId) {
         this.objectId = objectId;
+    }
+
+    public String getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 
     public String getSessionToken() {

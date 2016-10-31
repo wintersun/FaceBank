@@ -1,6 +1,8 @@
 package com.scysun.app.ui;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +12,10 @@ import android.widget.TextView;
 
 import com.scysun.app.R;
 import com.scysun.app.core.User;
+import com.scysun.app.service.ContactService;
 import com.squareup.picasso.Picasso;
+
+import org.apache.commons.lang.StringUtils;
 
 import butterknife.InjectView;
 
@@ -47,8 +52,22 @@ public class UserActivity extends BootstrapActivity {
         btnEditDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Query the Contact_ID
+                String contactId = user.getContactId();
+                if(StringUtils.isEmpty(contactId)) {
+                    ContentResolver resolver = getContentResolver();
+                    Cursor cursor = resolver.query(ContactService.RAW_CONTACTS_URI,
+                            new String[]{"contact_id"}, "_id=?", new String[]{user.getObjectId()}, null);
+                    if (cursor != null && cursor.getCount() > 0) {
+                        if (cursor.moveToNext()) {
+                            contactId = cursor.getString(0);
+                        }
+                        cursor.close();
+                    }
+                }
+
                 Intent intent = new Intent(Intent.ACTION_EDIT,
-                        Uri.parse("content://com.android.contacts/contacts/" + user.getObjectId()));
+                        Uri.parse("content://com.android.contacts/contacts/" + contactId));
 
                 startActivity(intent);
             }

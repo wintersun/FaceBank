@@ -120,6 +120,8 @@ public final class Constants {
         }
 
         public static final int TIMER_NOTIFICATION_ID = 1000; // Why 1000? Why not? :)
+        public static final int CONTACT_SCANNING_NOTIFICATION_ID = 1001;
+        public static final int CONTACT_SCANNING_RESULT_NOTIFICATION_ID = 1002;
     }
 
     public static class DateFormat{
@@ -137,6 +139,15 @@ public final class Constants {
         public static final String BIRTHDAY = "BIRTHDAY";
         public static final String AGE_OF_RETIREMENT = "AGE_OF_RETIREMENT";
         public static final String AGE_OF_DEATH = "AGE_OF_DEATH";
+    }
+
+    public static class SharedPreferences_Contact {
+        public static final String NAME = "Contact";
+        public static final String HAS_SCANNED = "HAS_SCANNED";
+    }
+
+    public static class Separator {
+        public static final String COMMA = ",";
     }
 }
 

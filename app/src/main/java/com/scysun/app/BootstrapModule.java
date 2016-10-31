@@ -13,6 +13,7 @@ import com.scysun.app.core.RestAdapterRequestInterceptor;
 import com.scysun.app.core.RestErrorHandler;
 import com.scysun.app.core.TimerService;
 import com.scysun.app.core.UserAgentProvider;
+import com.scysun.app.service.ContactScanService;
 import com.scysun.app.ui.BootstrapTimerActivity;
 import com.scysun.app.ui.CheckInsListFragment;
 import com.scysun.app.ui.MainActivity;
@@ -50,7 +51,8 @@ import retrofit.converter.GsonConverter;
                 NewsListFragment.class,
                 UserActivity.class,
                 UserListFragment.class,
-                TimerService.class
+                TimerService.class,
+                ContactScanService.class
         }
 )
 public class BootstrapModule {

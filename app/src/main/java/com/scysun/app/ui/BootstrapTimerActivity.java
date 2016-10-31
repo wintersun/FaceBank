@@ -91,7 +91,7 @@ public class BootstrapTimerActivity extends BootstrapFragmentActivity implements
                     TaskStackBuilder.create(this)
                             // Add all of this activity's parents to the back stack
                             .addNextIntentWithParentStack(upIntent)
-                                    // Navigate up to the closest parent
+                            // Navigate up to the closest parent
                             .startActivities();
                 } else {
                     // This activity is part of this app's task, so simply
@@ -99,7 +99,7 @@ public class BootstrapTimerActivity extends BootstrapFragmentActivity implements
                     NavUtils.navigateUpTo(this, upIntent);
                 }
                 return true;
-                default:
+            default:
                 return super.onOptionsItemSelected(item);
         }
     }

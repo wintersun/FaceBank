@@ -62,4 +62,9 @@
     <!-- Contact Detail -->
     <string name="edit_detail">Edit Contact Detail</string>
 
+    <!-- Scan Contact Info -->
+    <string name="start_scan">Start scanning contacts</string>
+    <string name="label_scan_contact">Scan Contacts</string>
+    <string name="scan_result">Total %d contacts added!</string>
+
 </resources>

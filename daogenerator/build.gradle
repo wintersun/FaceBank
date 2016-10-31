@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin:'application'
+
+group = 'com.scysun'
+version = '0.0.2'
+sourceCompatibility = 1.6
+mainClassName = "com.scysun.app.dao.FacebankDaoGenerator"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile('de.greenrobot:greendao-generator:1.3.0')
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+            srcDir 'src-gen'
+        }
+    }
+}
+
+artifacts {
+    archives jar
+}

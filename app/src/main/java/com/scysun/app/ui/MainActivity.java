@@ -3,6 +3,9 @@
 package com.scysun.app.ui;
 
 import android.accounts.OperationCanceledException;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -16,9 +19,13 @@ import android.view.Window;
 import com.scysun.app.BootstrapServiceProvider;
 import com.scysun.app.R;
 import com.scysun.app.core.BootstrapService;
+import com.scysun.app.core.Constants;
+import com.scysun.app.service.ContactScanService;
 import com.scysun.app.events.NavItemSelectedEvent;
 import com.scysun.app.util.Ln;
+import com.scysun.app.util.PreferenceUtils;
 import com.scysun.app.util.SafeAsyncTask;
+import com.scysun.app.util.ServiceUtils;
 import com.scysun.app.util.UIUtils;
 import com.squareup.otto.Subscribe;
 
@@ -26,6 +33,7 @@ import javax.inject.Inject;
 
 import butterknife.Views;
 
+import static com.scysun.app.core.Constants.SharedPreferences_Contact;
 
 /**
  * Initial activity for the application.
@@ -102,9 +110,7 @@ public class MainActivity extends BootstrapFragmentActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-
         checkAuth();
-
     }
 
     private boolean isTablet() {
@@ -134,7 +140,7 @@ public class MainActivity extends BootstrapFragmentActivity {
     private void initScreen() {
         if (userHasAuthenticated) {
 
-            Ln.d("Foo");
+            Ln.d("initScreen");
             final FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, new CarouselFragment())
@@ -209,6 +215,28 @@ public class MainActivity extends BootstrapFragmentActivity {
                 // Timer
                 navigateToTimer();
                 break;
+            case 2:
+                // Scan Contacts
+                scanContacts();
+                break;
         }
+    }
+
+    public void scanContacts()
+    {
+        //TODO For Test
+//        PreferenceUtils.writeSharedPreferenceBooleanValue(this, Constants.SharedPreferences_Contact.NAME, Constants.SharedPreferences_Contact.HAS_SCANNED, false, true);
+
+        this.setSupportProgressBarIndeterminateVisibility(true);
+
+        //Start to read contacts info
+        //Has been scanned?
+//        if(!PreferenceUtils.readSharedPreferenceBooleanVariable(this, Constants.SharedPreferences_Contact.NAME, Constants.SharedPreferences_Contact.HAS_SCANNED, false)) {
+            //Service is not running?
+            if (!ServiceUtils.isServiceRunning((ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE), ContactScanService.class)) {
+                final Intent i = new Intent(this, ContactScanService.class);
+                this.startService(i);
+            }
+//        }
     }
 }

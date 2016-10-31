@@ -63,5 +63,9 @@
     <!-- Contact Detail -->
     <string name="edit_detail">修改通讯录资料</string>
 
+    <!-- Scan Contact Info -->
+    <string name="start_scan">开始扫描联系人信息</string>
+    <string name="label_scan_contact">扫描手机联系人</string>
+    <string name="scan_result">恭喜，一共扫描到了%d个联系人</string>
 
 </resources>

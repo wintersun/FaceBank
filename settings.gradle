@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':daogenerator'
 // include ':integration-tests'
